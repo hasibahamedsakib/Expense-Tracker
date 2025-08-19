@@ -1,0 +1,459 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Plus, DollarSign, TrendingUp, Calendar, PieChart } from 'lucide-react';
+import ExpenseForm from '@/components/expense/ExpenseForm';
+import ExpenseList from '@/components/expense/ExpenseList';
+import ExpenseChart from '@/components/charts/ExpenseChart';
+import AIInsightsCard from '@/components/dashboard/AIInsightsCard';
+import AIChat from '@/components/ai/AIChat';
+import AuthForm from '@/components/auth/AuthForm';
+import DashboardHeader from '@/components/auth/DashboardHeader';
+import { useAuth } from '@/contexts/AuthContext';
+import { Expense, ExpenseStats, AIInsight } from '@/types';
+
+function DashboardContent() {
+  const { user } = useAuth();
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [stats, setStats] = useState<ExpenseStats | null>(null);
+  const [insights, setInsights] = useState<AIInsight | null>(null);
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAIInsights = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      console.log("Fetching AI insights...");
+      const response = await fetch("/api/ai/insights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ period: "month" }),
+        credentials: 'include',
+      });
+
+      console.log("AI insights response status:", response.status);
+
+      if (response.ok) {
+        const insightData = await response.json();
+        console.log("AI insights data:", insightData);
+        setInsights(insightData);
+      } else {
+        console.error("Failed to fetch AI insights:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error fetching AI insights:", error);
+    }
+  }, [user]);
+
+  const fetchDashboardData = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      console.log("Fetching dashboard data...");
+
+      // Fetch expenses for current month
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      const expensesUrl = `/api/expenses?startDate=${startOfMonth.toISOString()}`;
+      const statsUrl = `/api/analytics?period=month`;
+
+      console.log("Fetching from URLs:", { expensesUrl, statsUrl });
+
+      const [expensesRes, statsRes] = await Promise.all([
+        fetch(expensesUrl, { credentials: 'include' }),
+        fetch(statsUrl, { credentials: 'include' }),
+      ]);
+
+      console.log("Response status:", {
+        expenses: expensesRes.status,
+        stats: statsRes.status,
+      });
+
+      if (expensesRes.ok) {
+        const expensesData = await expensesRes.json();
+        console.log("Expenses data:", expensesData);
+        setExpenses(expensesData);
+      } else {
+        const errorText = await expensesRes.text();
+        console.error("Failed to fetch expenses:", errorText);
+        setError(`Failed to fetch expenses: ${errorText}`);
+      }
+
+      if (statsRes.ok) {
+        const statsData = await statsRes.json();
+        console.log("Stats data:", statsData);
+        setStats(statsData);
+      } else {
+        const errorText = await statsRes.text();
+        console.error("Failed to fetch stats:", errorText);
+        setError(`Failed to fetch stats: ${errorText}`);
+      }
+
+      // Fetch AI insights
+      await fetchAIInsights();
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+      setError(`Error fetching data: ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, fetchAIInsights]);
+
+  useEffect(() => {
+    if (user) {
+      fetchDashboardData();
+    }
+  }, [user, fetchDashboardData]);
+
+  const handleExpenseAdded = (newExpense: Expense) => {
+    setExpenses((prev: Expense[]) => [newExpense, ...prev]);
+    setShowExpenseForm(false);
+    // Refresh stats and insights
+    setTimeout(() => {
+      fetchDashboardData();
+    }, 500);
+  };
+
+  const handleSeedData = async () => {
+    try {
+      const response = await fetch('/api/expenses/seed', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        alert(`✅ Successfully created ${result.expenses?.length || 10} sample expenses!`);
+        // Refresh dashboard data
+        fetchDashboardData();
+      } else {
+        const error = await response.json();
+        alert(`❌ Failed to seed data: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error seeding data:', error);
+      alert('❌ Failed to seed data. Please try again.');
+    }
+  };
+
+  const handleExpenseUpdated = (updatedExpense: Expense) => {
+    setExpenses((prev: Expense[]) =>
+      prev.map((expense) =>
+        expense._id === updatedExpense._id ? updatedExpense : expense
+      )
+    );
+    // Refresh stats and insights
+    setTimeout(() => {
+      fetchDashboardData();
+    }, 500);
+  };
+
+  const handleExpenseDeleted = (deletedId: string) => {
+    setExpenses((prev: Expense[]) =>
+      prev.filter((expense) => expense._id !== deletedId)
+    );
+    // Refresh stats and insights
+    setTimeout(() => {
+      fetchDashboardData();
+    }, 500);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">
+            Loading your financial dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 mb-4">⚠️ Error</div>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={fetchDashboardData}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              💰 Expense Tracker
+            </h1>
+            <p className="text-gray-600">
+              AI-powered financial insights for smarter spending
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setShowExpenseForm(true)}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Expense
+            </Button>
+            <Button
+              onClick={fetchDashboardData}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              🔄 Refresh Data
+            </Button>
+            <Button
+              onClick={handleSeedData}
+              variant="secondary"
+              className="flex items-center gap-2"
+            >
+              🌱 Seed Data
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Monthly Total
+              </CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                ${stats?.monthlyTotal.toFixed(2) || "0.00"}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Current month spending
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Daily Average
+              </CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                ${stats?.dailyAverage.toFixed(2) || "0.00"}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Per day this month
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Top Category
+              </CardTitle>
+              <PieChart className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {stats?.topCategories[0]?.category || "None"}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                ${stats?.topCategories[0]?.amount.toFixed(2) || "0.00"}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Expenses Count
+              </CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{expenses.length}</div>
+              <p className="text-xs text-muted-foreground">This month</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Charts and Insights */}
+          <div className="lg:col-span-2 space-y-6">
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview" className="space-y-6">
+                {stats && stats.categoryBreakdown.length > 0 ? (
+                  <ExpenseChart
+                    categoryBreakdown={stats.categoryBreakdown}
+                    topCategories={stats.topCategories}
+                  />
+                ) : (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Expense Overview</CardTitle>
+                      <CardDescription>
+                        Your spending visualization
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-center py-12 text-gray-500">
+                        <PieChart className="mx-auto h-12 w-12 mb-4" />
+                        <p>
+                          No expenses yet. Add your first expense to see
+                          insights!
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {insights ? (
+                  <AIInsightsCard insight={insights} />
+                ) : (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>🤖 AI Insights</CardTitle>
+                      <CardDescription>
+                        Personalized financial advice
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-center py-8 text-gray-500">
+                        <p>
+                          Start tracking expenses to get AI-powered insights and
+                          recommendations!
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="analytics">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Detailed Analytics</CardTitle>
+                    <CardDescription>
+                      Comprehensive view of your spending patterns
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {stats?.categoryBreakdown &&
+                    stats.categoryBreakdown.length > 0 ? (
+                      <div>
+                        {stats.categoryBreakdown.map((category) => (
+                          <div
+                            key={category.category}
+                            className="flex justify-between items-center py-2"
+                          >
+                            <span className="font-medium">
+                              {category.category}
+                            </span>
+                            <div className="text-right">
+                              <span className="font-semibold">
+                                ${category.amount.toFixed(2)}
+                              </span>
+                              <span className="text-sm text-gray-500 ml-2">
+                                ({category.percentage.toFixed(1)}%)
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12 text-gray-500">
+                        <TrendingUp className="mx-auto h-12 w-12 mb-4" />
+                        <p>
+                          Analytics will appear once you start adding expenses
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Right Column - Recent Expenses */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Expenses</CardTitle>
+                <CardDescription>Your latest transactions</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ExpenseList
+                  expenses={expenses.slice(0, 10)}
+                  onExpenseUpdated={handleExpenseUpdated}
+                  onExpenseDeleted={handleExpenseDeleted}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Expense Form Modal */}
+        {showExpenseForm && (
+          <ExpenseForm
+            onExpenseAdded={handleExpenseAdded}
+            onClose={() => setShowExpenseForm(false)}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  const { user, isLoading: authLoading, login } = useAuth();
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthForm onLogin={login} />;
+  }
+
+  return (
+    <>
+      <DashboardHeader />
+      <DashboardContent />
+      <AIChat />
+    </>
+  );
+}
