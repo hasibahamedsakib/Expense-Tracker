@@ -68,14 +68,36 @@ export default function AIChat() {
         };
         setMessages((prev) => [...prev, assistantMessage]);
       } else {
-        throw new Error("Failed to get AI response");
+        // Handle different error status codes
+        const errorData = await response
+          .json()
+          .catch(() => ({ error: "Unknown error" }));
+        console.error("AI Chat API Error:", response.status, errorData);
+
+        let errorMessage =
+          "I'm having some technical difficulties. Please try again!";
+        if (response.status === 401) {
+          errorMessage = "Please log in to continue chatting with me.";
+        } else if (response.status === 429) {
+          errorMessage =
+            "I'm getting a lot of requests right now. Please wait a moment and try again.";
+        }
+
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: errorMessage,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
       }
-    } catch {
+    } catch (error) {
+      console.error("Chat request failed:", error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content:
-          "Sorry, I'm having trouble responding right now. Please try again later.",
+          "I couldn't connect to process your message. Please check your internet connection and try again.",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);

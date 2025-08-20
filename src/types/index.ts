@@ -48,25 +48,29 @@ export interface AIInsight {
   category: ExpenseCategory;
   recommendedBlogs: string[];
   generatedAt: Date;
-  type: 'tip' | 'warning' | 'recommendation';
+  type: "tip" | "warning" | "recommendation";
 }
 
-export type ExpenseCategory = 
-  | 'Food & Dining'
-  | 'Transportation'
-  | 'Shopping'
-  | 'Entertainment'
-  | 'Bills & Utilities'
-  | 'Healthcare'
-  | 'Education'
-  | 'Travel'
-  | 'Groceries'
-  | 'Personal Care'
-  | 'Other';
+export type ExpenseCategory =
+  | "Food & Dining"
+  | "Transportation"
+  | "Shopping"
+  | "Entertainment"
+  | "Bills & Utilities"
+  | "Healthcare"
+  | "Education"
+  | "Travel"
+  | "Groceries"
+  | "Personal Care"
+  | "Other";
 
 export interface ExpenseStats {
   totalSpent: number;
-  categoryBreakdown: { category: ExpenseCategory; amount: number; percentage: number }[];
+  categoryBreakdown: {
+    category: ExpenseCategory;
+    amount: number;
+    percentage: number;
+  }[];
   dailyAverage: number;
   weeklyAverage: number;
   monthlyTotal: number;

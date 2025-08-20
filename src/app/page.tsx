@@ -1,19 +1,25 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Plus, DollarSign, TrendingUp, Calendar, PieChart } from 'lucide-react';
-import ExpenseForm from '@/components/expense/ExpenseForm';
-import ExpenseList from '@/components/expense/ExpenseList';
-import ExpenseChart from '@/components/charts/ExpenseChart';
-import AIInsightsCard from '@/components/dashboard/AIInsightsCard';
-import AIChat from '@/components/ai/AIChat';
-import AuthForm from '@/components/auth/AuthForm';
-import DashboardHeader from '@/components/auth/DashboardHeader';
-import { useAuth } from '@/contexts/AuthContext';
-import { Expense, ExpenseStats, AIInsight } from '@/types';
+import { useState, useEffect, useCallback } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Plus, DollarSign, TrendingUp, Calendar, PieChart } from "lucide-react";
+import ExpenseForm from "@/components/expense/ExpenseForm";
+import ExpenseList from "@/components/expense/ExpenseList";
+import ExpenseChart from "@/components/charts/ExpenseChart";
+import AIInsightsCard from "@/components/dashboard/AIInsightsCard";
+import AIChat from "@/components/ai/AIChat";
+import AuthForm from "@/components/auth/AuthForm";
+import DashboardHeader from "@/components/auth/DashboardHeader";
+import { useAuth } from "@/contexts/AuthContext";
+import { Expense, ExpenseStats, AIInsight } from "@/types";
 
 function DashboardContent() {
   const { user } = useAuth();
@@ -28,19 +34,19 @@ function DashboardContent() {
     if (!user) return;
 
     try {
-      const response = await fetch('/api/ai/insights', {
-        method: 'POST',
-        credentials: 'include',
+      const response = await fetch("/api/ai/insights", {
+        method: "POST",
+        credentials: "include",
       });
 
       if (response.ok) {
         const data = await response.json();
         setInsights(data);
       } else {
-        console.warn('Failed to fetch AI insights');
+        console.warn("Failed to fetch AI insights");
       }
     } catch (error) {
-      console.error('Error fetching AI insights:', error);
+      console.error("Error fetching AI insights:", error);
     }
   }, [user]);
 
@@ -52,20 +58,20 @@ function DashboardContent() {
 
     try {
       // Fetch expenses
-      const expensesResponse = await fetch('/api/expenses', {
-        credentials: 'include',
+      const expensesResponse = await fetch("/api/expenses", {
+        credentials: "include",
       });
-      
+
       if (expensesResponse.ok) {
         const expensesData = await expensesResponse.json();
         setExpenses(expensesData);
       }
 
       // Fetch analytics
-      const analyticsResponse = await fetch('/api/analytics?period=month', {
-        credentials: 'include',
+      const analyticsResponse = await fetch("/api/analytics?period=month", {
+        credentials: "include",
       });
-      
+
       if (analyticsResponse.ok) {
         const analyticsData = await analyticsResponse.json();
         setStats(analyticsData);
@@ -74,8 +80,8 @@ function DashboardContent() {
       // Fetch AI insights
       await fetchAIInsights();
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      setError('Failed to load dashboard data. Please try again.');
+      console.error("Error fetching dashboard data:", error);
+      setError("Failed to load dashboard data. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -96,14 +102,18 @@ function DashboardContent() {
 
   const handleSeedData = async () => {
     try {
-      const response = await fetch('/api/expenses/seed', {
-        method: 'POST',
-        credentials: 'include',
+      const response = await fetch("/api/expenses/seed", {
+        method: "POST",
+        credentials: "include",
       });
-      
+
       if (response.ok) {
         const result = await response.json();
-        alert(`Successfully created ${result.expenses?.length || 10} sample expenses!`);
+        alert(
+          `Successfully created ${
+            result.expenses?.length || 10
+          } sample expenses!`
+        );
         // Refresh dashboard data
         fetchDashboardData();
       } else {
@@ -111,8 +121,8 @@ function DashboardContent() {
         alert(`Failed to seed data: ${error.error}`);
       }
     } catch (error) {
-      console.error('Error seeding data:', error);
-      alert('Failed to seed data. Please try again.');
+      console.error("Error seeding data:", error);
+      alert("Failed to seed data. Please try again.");
     }
   };
 
@@ -140,7 +150,9 @@ function DashboardContent() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading your financial dashboard...</p>
+            <p className="mt-4 text-gray-600">
+              Loading your financial dashboard...
+            </p>
           </div>
         </div>
       </div>
@@ -163,7 +175,7 @@ function DashboardContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <DashboardHeader />
-      
+
       <div className="max-w-7xl mx-auto p-6 pt-24">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
@@ -211,11 +223,9 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${stats?.totalSpent?.toFixed(2) || '0.00'}
+                ${stats?.totalSpent?.toFixed(2) || "0.00"}
               </div>
-              <p className="text-xs text-muted-foreground">
-                This month
-              </p>
+              <p className="text-xs text-muted-foreground">This month</p>
             </CardContent>
           </Card>
 
@@ -227,9 +237,7 @@ function DashboardContent() {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {expenses.length}
-              </div>
+              <div className="text-2xl font-bold">{expenses.length}</div>
               <p className="text-xs text-muted-foreground">
                 Total transactions
               </p>
@@ -245,10 +253,10 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {stats?.topCategories?.[0]?.category || 'None'}
+                {stats?.topCategories?.[0]?.category || "None"}
               </div>
               <p className="text-xs text-muted-foreground">
-                ${stats?.topCategories?.[0]?.amount?.toFixed(2) || '0.00'} spent
+                ${stats?.topCategories?.[0]?.amount?.toFixed(2) || "0.00"} spent
               </p>
             </CardContent>
           </Card>
@@ -262,7 +270,7 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${stats?.dailyAverage?.toFixed(2) || '0.00'}
+                ${stats?.dailyAverage?.toFixed(2) || "0.00"}
               </div>
               <p className="text-xs text-muted-foreground">
                 Per day this month
@@ -300,7 +308,8 @@ function DashboardContent() {
                       <div className="text-center py-8 text-gray-500">
                         <PieChart className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p className="text-lg font-medium mb-2">
-                          No expenses yet. Add your first expense to see insights!
+                          No expenses yet. Add your first expense to see
+                          insights!
                         </p>
                         <Button
                           onClick={() => setShowExpenseForm(true)}
@@ -327,33 +336,42 @@ function DashboardContent() {
                   <CardContent>
                     {expenses.length > 0 && stats ? (
                       <div className="space-y-6">
-                        <ExpenseChart 
+                        <ExpenseChart
                           categoryBreakdown={stats.categoryBreakdown || []}
                           topCategories={stats.topCategories || []}
                         />
-                        
+
                         {/* Category Breakdown */}
                         <div>
-                          <h4 className="text-sm font-medium mb-3">Category Breakdown</h4>
+                          <h4 className="text-sm font-medium mb-3">
+                            Category Breakdown
+                          </h4>
                           <div className="space-y-2">
-                            {stats.topCategories?.slice(0, 5).map((category, index) => (
-                              <div key={category.category} className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <div 
-                                    className="w-3 h-3 rounded-full"
-                                    style={{ 
-                                      backgroundColor: `hsl(${index * 60}, 70%, 50%)` 
-                                    }}
-                                  />
-                                  <span className="text-sm text-gray-600">
-                                    {category.category}
+                            {stats.topCategories
+                              ?.slice(0, 5)
+                              .map((category, index) => (
+                                <div
+                                  key={category.category}
+                                  className="flex items-center justify-between"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <div
+                                      className="w-3 h-3 rounded-full"
+                                      style={{
+                                        backgroundColor: `hsl(${
+                                          index * 60
+                                        }, 70%, 50%)`,
+                                      }}
+                                    />
+                                    <span className="text-sm text-gray-600">
+                                      {category.category}
+                                    </span>
+                                  </div>
+                                  <span className="text-sm font-medium">
+                                    ${category.amount.toFixed(2)}
                                   </span>
                                 </div>
-                                <span className="text-sm font-medium">
-                                  ${category.amount.toFixed(2)}
-                                </span>
-                              </div>
-                            ))}
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -410,19 +428,12 @@ export default function Home() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              AI Expense Tracker
-            </h1>
-            <p className="text-gray-600">
-              Track your expenses with AI-powered insights
-            </p>
-          </div>
-          <AuthForm onLogin={() => {}} />
-        </div>
-      </div>
+      <AuthForm
+        onLogin={() => {
+          // Navigation happens automatically through useAuth context
+          // The toast is shown in AuthForm component
+        }}
+      />
     );
   }
 

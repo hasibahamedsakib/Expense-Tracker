@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Expense from '@/models/Expense';
-import { Types } from 'mongoose';
+import { NextRequest, NextResponse } from "next/server";
+import dbConnect from "@/lib/mongodb";
+import Expense from "@/models/Expense";
+import { Types } from "mongoose";
 
 // PUT /api/expenses/[id] - Update expense
 export async function PUT(
@@ -10,19 +10,19 @@ export async function PUT(
 ) {
   try {
     await dbConnect();
-    
+
     const { id } = await params;
-    
+
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
-        { error: 'Invalid expense ID' },
+        { error: "Invalid expense ID" },
         { status: 400 }
       );
     }
 
     const body = await request.json();
     const { amount, category, note, date } = body;
-    
+
     const updateData: Partial<{
       amount: number;
       category: string;
@@ -33,32 +33,28 @@ export async function PUT(
     if (category !== undefined) updateData.category = category;
     if (note !== undefined) updateData.note = note;
     if (date !== undefined) updateData.date = new Date(date);
-    
+
     if (updateData.amount && updateData.amount <= 0) {
       return NextResponse.json(
-        { error: 'Amount must be greater than 0' },
+        { error: "Amount must be greater than 0" },
         { status: 400 }
       );
     }
 
-    const expense = await Expense.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const expense = await Expense.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!expense) {
-      return NextResponse.json(
-        { error: 'Expense not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Expense not found" }, { status: 404 });
     }
 
     return NextResponse.json(expense);
   } catch (error) {
-    console.error('Error updating expense:', error);
+    console.error("Error updating expense:", error);
     return NextResponse.json(
-      { error: 'Failed to update expense' },
+      { error: "Failed to update expense" },
       { status: 500 }
     );
   }
@@ -71,12 +67,12 @@ export async function DELETE(
 ) {
   try {
     await dbConnect();
-    
+
     const { id } = await params;
-    
+
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
-        { error: 'Invalid expense ID' },
+        { error: "Invalid expense ID" },
         { status: 400 }
       );
     }
@@ -84,17 +80,14 @@ export async function DELETE(
     const expense = await Expense.findByIdAndDelete(id);
 
     if (!expense) {
-      return NextResponse.json(
-        { error: 'Expense not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Expense not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: 'Expense deleted successfully' });
+    return NextResponse.json({ message: "Expense deleted successfully" });
   } catch (error) {
-    console.error('Error deleting expense:', error);
+    console.error("Error deleting expense:", error);
     return NextResponse.json(
-      { error: 'Failed to delete expense' },
+      { error: "Failed to delete expense" },
       { status: 500 }
     );
   }

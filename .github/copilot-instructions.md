@@ -21,6 +21,7 @@
 This workspace contains a full-stack Next.js application for tracking daily expenses with AI-powered insights and recommendations.
 
 ### Technology Stack
+
 - Frontend: Next.js 14, React, TypeScript, TailwindCSS, ShadCN UI
 - Backend: Next.js API routes, Node.js
 - Database: MongoDB with Mongoose
@@ -29,6 +30,7 @@ This workspace contains a full-stack Next.js application for tracking daily expe
 - Icons: Lucide React
 
 ### Project Structure
+
 - `/src/app` - Next.js app router pages and API routes
 - `/src/components` - Reusable React components (UI, expense, charts, dashboard)
 - `/src/lib` - Utility functions and database connections
@@ -36,6 +38,7 @@ This workspace contains a full-stack Next.js application for tracking daily expe
 - `/src/models` - MongoDB/Mongoose models
 
 ### Features Implemented
+
 - Expense CRUD operations with categorization
 - Real-time dashboard with statistics
 - AI-powered spending insights using OpenAI

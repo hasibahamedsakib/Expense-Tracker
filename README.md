@@ -5,18 +5,21 @@ A modern, intelligent personal finance management system that helps users track 
 ## 🚀 Features
 
 ### Core Functionality
+
 - **Expense Management**: Add, edit, and delete daily expenses with multiple categories
 - **Reports & Analytics**: Daily, weekly, monthly, and yearly summaries with visual charts
 - **Category Tracking**: Comprehensive categorization of expenses with color-coded visualization
 - **Real-time Dashboard**: Live updates of spending patterns and statistics
 
 ### AI-Powered Insights
+
 - **Smart Analysis**: AI detects overspending patterns and spending habits
 - **Personalized Tips**: Get actionable suggestions to reduce unnecessary spending
 - **Budget Recommendations**: AI-suggested monthly budgets based on spending history
 - **Blog Recommendations**: Relevant financial articles based on spending patterns
 
 ### Modern UI/UX
+
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Dark/Light Mode**: Automatic theme switching support
 - **Interactive Charts**: Beautiful visualizations using Recharts
@@ -35,31 +38,35 @@ A modern, intelligent personal finance management system that helps users track 
 ## 📦 Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd costing-tracker
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
    Create a `.env.local` file in the root directory:
+
    ```bash
    # MongoDB Configuration
    MONGODB_URI=mongodb://localhost:27017/expense-tracker
-   
+
    # OpenAI Configuration
    OPENAI_API_KEY=your-openai-api-key-here
-   
+
    # NextAuth Configuration (optional)
    NEXTAUTH_URL=http://localhost:3000
    NEXTAUTH_SECRET=your-secret-key-here
    ```
 
 4. **Start the development server**
+
    ```bash
    npm run dev
    ```
@@ -98,17 +105,20 @@ src/
 ## 🎯 Usage Guide
 
 ### Adding Expenses
+
 1. Click the "Add Expense" button on the dashboard
 2. Fill in the amount, select a category, and add optional notes
 3. Choose the date (defaults to today)
 4. Click "Add Expense" to save
 
 ### Viewing Analytics
+
 - **Overview Tab**: See expense distribution charts and AI insights
 - **Analytics Tab**: View detailed category breakdowns and percentages
 - **Recent Expenses**: Quick access to your latest transactions
 
 ### AI Insights
+
 - The AI analyzes your spending patterns automatically
 - Get personalized tips for reducing expenses
 - Receive category-specific recommendations
@@ -128,6 +138,7 @@ src/
 ## 📊 Database Schema
 
 ### Expense Model
+
 ```typescript
 {
   userId: string;
@@ -139,6 +150,7 @@ src/
 ```
 
 ### User Model
+
 ```typescript
 {
   name: string;
@@ -148,6 +160,7 @@ src/
 ```
 
 ### Budget Model
+
 ```typescript
 {
   userId: string;

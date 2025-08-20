@@ -1,10 +1,22 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { AIInsight } from '@/types';
-import { Brain, Lightbulb, AlertTriangle, BookOpen, ExternalLink } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AIInsight } from "@/types";
+import {
+  Brain,
+  Lightbulb,
+  AlertTriangle,
+  BookOpen,
+  ExternalLink,
+} from "lucide-react";
 
 interface AIInsightsCardProps {
   insight: AIInsight;
@@ -13,9 +25,9 @@ interface AIInsightsCardProps {
 export default function AIInsightsCard({ insight }: AIInsightsCardProps) {
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'warning':
+      case "warning":
         return <AlertTriangle className="h-5 w-5 text-orange-600" />;
-      case 'recommendation':
+      case "recommendation":
         return <Lightbulb className="h-5 w-5 text-blue-600" />;
       default:
         return <Brain className="h-5 w-5 text-green-600" />;
@@ -24,12 +36,12 @@ export default function AIInsightsCard({ insight }: AIInsightsCardProps) {
 
   const getInsightColor = (type: string) => {
     switch (type) {
-      case 'warning':
-        return 'bg-orange-100 text-orange-800';
-      case 'recommendation':
-        return 'bg-blue-100 text-blue-800';
+      case "warning":
+        return "bg-orange-100 text-orange-800";
+      case "recommendation":
+        return "bg-blue-100 text-blue-800";
       default:
-        return 'bg-green-100 text-green-800';
+        return "bg-green-100 text-green-800";
     }
   };
 
@@ -51,10 +63,11 @@ export default function AIInsightsCard({ insight }: AIInsightsCardProps) {
         <div className="bg-gray-50 p-4 rounded-lg">
           <p className="text-gray-800 leading-relaxed">{insight.message}</p>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-600">
-            <span className="font-medium">Category Focus:</span> {insight.category}
+            <span className="font-medium">Category Focus:</span>{" "}
+            {insight.category}
           </div>
           <div className="text-sm text-gray-500">
             {new Date(insight.generatedAt).toLocaleDateString()}
@@ -65,7 +78,9 @@ export default function AIInsightsCard({ insight }: AIInsightsCardProps) {
           <div className="mt-4 p-4 bg-blue-50 rounded-lg">
             <div className="flex items-center gap-2 mb-3">
               <BookOpen className="h-4 w-4 text-blue-600" />
-              <span className="font-medium text-blue-800">Recommended Reading</span>
+              <span className="font-medium text-blue-800">
+                Recommended Reading
+              </span>
             </div>
             <div className="space-y-2">
               {insight.recommendedBlogs.map((blogUrl, index) => (
@@ -74,7 +89,7 @@ export default function AIInsightsCard({ insight }: AIInsightsCardProps) {
                   variant="ghost"
                   size="sm"
                   className="text-blue-600 hover:text-blue-800 justify-start h-auto p-2"
-                  onClick={() => window.open(blogUrl, '_blank')}
+                  onClick={() => window.open(blogUrl, "_blank")}
                 >
                   <ExternalLink className="h-3 w-3 mr-2" />
                   Financial Article {index + 1}

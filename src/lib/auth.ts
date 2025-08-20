@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import { NextRequest } from 'next/server';
+import jwt from "jsonwebtoken";
+import { NextRequest } from "next/server";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key";
 
 interface DecodedToken {
   userId: string;
@@ -11,8 +11,8 @@ interface DecodedToken {
 
 export function getAuthUser(request: NextRequest): DecodedToken | null {
   try {
-    const token = request.cookies.get('auth-token')?.value;
-    
+    const token = request.cookies.get("auth-token")?.value;
+
     if (!token) {
       return null;
     }
@@ -27,7 +27,7 @@ export function getAuthUser(request: NextRequest): DecodedToken | null {
 export function requireAuth(request: NextRequest) {
   const user = getAuthUser(request);
   if (!user) {
-    throw new Error('Authentication required');
+    throw new Error("Authentication required");
   }
   return user;
 }
