@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Initialize OpenAI with the API key
     const openai = new OpenAI({
@@ -44,24 +44,26 @@ export async function GET(request: NextRequest) {
       model: completion.model,
       usage: completion.usage,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("OpenAI API test failed:", error);
 
     let errorMessage = "Unknown error";
     let errorCode = "unknown";
 
-    if (error.status === 401) {
+    const errorObj = error as { status?: number; code?: string; message?: string; type?: string };
+
+    if (errorObj.status === 401) {
       errorMessage = "Invalid API key - please check your OpenAI API key";
       errorCode = "invalid_api_key";
-    } else if (error.status === 429) {
+    } else if (errorObj.status === 429) {
       errorMessage = "Rate limit exceeded or insufficient quota";
       errorCode = "rate_limit_exceeded";
-    } else if (error.code === "insufficient_quota") {
+    } else if (errorObj.code === "insufficient_quota") {
       errorMessage = "OpenAI API quota exceeded - need to add credits";
       errorCode = "insufficient_quota";
     } else {
-      errorMessage = error.message || "API request failed";
-      errorCode = error.code || "api_error";
+      errorMessage = errorObj.message || "API request failed";
+      errorCode = errorObj.code || "api_error";
     }
 
     return NextResponse.json({
@@ -69,9 +71,9 @@ export async function GET(request: NextRequest) {
       message: errorMessage,
       code: errorCode,
       details: {
-        status: error.status,
-        code: error.code,
-        type: error.type,
+        status: errorObj.status,
+        code: errorObj.code,
+        type: errorObj.type,
       },
     });
   }

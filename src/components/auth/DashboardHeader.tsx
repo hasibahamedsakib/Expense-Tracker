@@ -18,7 +18,7 @@ export default function DashboardHeader({ children }: DashboardHeaderProps) {
   return (
     <div className="flex justify-between items-center mb-6 p-4 bg-white rounded-lg shadow-sm">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">💰 Expense Tracker</h1>
+        <h1 className="text-2xl font-bold text-gray-900">৳ Expense Tracker</h1>
         <p className="text-gray-600">Welcome back, {user?.name}</p>
       </div>
 

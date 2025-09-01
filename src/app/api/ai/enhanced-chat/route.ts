@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
 interface ContextData {
   totalSpent: number;
-  dailyAverage: string;
+  dailyAverage: number;
   topCategory: string;
   topCategoryAmount: number;
 }
@@ -38,12 +38,12 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
     {
       keywords: ["predict", "future", "next month", "forecast"],
       responses: [
-        `Based on your spending patterns, I predict you'll likely spend around $${(
+        `Based on your spending patterns, I predict you'll likely spend around ৳${(
           contextData?.totalSpent * 1.05
         ).toFixed(2)} next month if trends continue. Your ${
           contextData?.topCategory
         } spending might increase by 5-10%.`,
-        `Looking at your data trends, next month you might see spending around $${(
+        `Looking at your data trends, next month you might see spending around ৳${(
           contextData?.totalSpent * 0.95
         ).toFixed(
           2
@@ -54,9 +54,9 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
     {
       keywords: ["comparison", "compare", "vs", "versus", "against"],
       responses: [
-        `Compared to typical spending patterns, your $${contextData?.dailyAverage}/day is quite reasonable. Most people in similar situations spend 10-20% more in ${contextData?.topCategory}.`,
-        `Your spending profile shows you're more conscious than average. The typical person spends $${(
-          parseFloat(contextData?.dailyAverage) * 1.3
+        `Compared to typical spending patterns, your ৳${contextData?.dailyAverage}/day is quite reasonable. Most people in similar situations spend 10-20% more in ${contextData?.topCategory}.`,
+        `Your spending profile shows you're more conscious than average. The typical person spends ৳${(
+          (contextData?.dailyAverage || 0) * 1.3
         ).toFixed(2)}/day in your category mix.`,
       ],
       confidence: 0.75,
@@ -66,13 +66,13 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
       responses: [
         `To optimize your finances, I'd focus on your ${
           contextData?.topCategory
-        } spending first. A 15% reduction there could save you $${(
+        } spending first. A 15% reduction there could save you ৳${(
           contextData?.topCategoryAmount * 0.15
         ).toFixed(2)}/month without major lifestyle changes.`,
         `Smart optimization strategy: Your ${
           contextData?.topCategory
-        } has the most potential. Try the 'conscious spending' approach - question each purchase over $${(
-          contextData?.dailyAverage * 2
+        } has the most potential. Try the 'conscious spending' approach - question each purchase over ৳${(
+          (contextData?.dailyAverage || 0) * 2
         ).toFixed(0)} in this category.`,
       ],
       confidence: 0.9,
@@ -100,7 +100,7 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
     )} pattern. This typically indicates ${getPersonalityInsight(
       contextData
     )}. Shall we explore optimizations?`,
-    `From a behavioral economics perspective, your $${
+    `From a behavioral economics perspective, your ৳${
       contextData?.dailyAverage
     }/day average suggests ${getBehavioralInsight(
       contextData
@@ -126,17 +126,24 @@ function getValueInsight(category: string) {
 }
 
 function getSpendingPersonality(contextData: ContextData) {
-  const ratio = contextData?.topCategoryAmount / contextData?.totalSpent;
+  const ratio = (contextData?.topCategoryAmount || 0) / (contextData?.totalSpent || 1);
   if (ratio > 0.4) return "focused spender";
   if (ratio > 0.25) return "balanced allocator";
   return "diversified spender";
 }
 
 function getBehavioralInsight(contextData: ContextData) {
-  const daily = parseFloat(contextData?.dailyAverage);
+  const daily = contextData?.dailyAverage || 0;
   if (daily > 50)
     return "you prefer quality over quantity and value convenience";
   if (daily > 25)
     return "you balance cost-consciousness with lifestyle preferences";
   return "you prioritize financial security and mindful spending";
+}
+
+function getPersonalityInsight(contextData: ContextData) {
+  const daily = contextData?.dailyAverage || 0;
+  if (daily > 50) return "you tend to prioritize convenience and time-saving";
+  if (daily > 25) return "you seek a balance between comfort and economy";
+  return "you're naturally cautious with financial decisions";
 }

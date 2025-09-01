@@ -24,19 +24,19 @@ export async function generateInsight(
     const prompt = `
     Analyze the following expense data and provide a helpful financial insight:
 
-    Total Spent: $${totalSpent.toFixed(2)}
-    Average Daily Spending: $${averageDaily.toFixed(2)}
+    Total Spent: ৳${totalSpent.toFixed(2)}
+    Average Daily Spending: ৳${averageDaily.toFixed(2)}
     
     Category Breakdown:
     ${Object.entries(categoryTotals)
       .map(
-        ([category, amount]) => `${category}: $${amount?.toFixed(2) || "0.00"}`
+        ([category, amount]) => `${category}: ৳${amount?.toFixed(2) || "0.00"}`
       )
       .join("\n")}
     
     Top Spending Categories:
     ${topCategories
-      .map((cat) => `${cat.category}: $${cat.amount.toFixed(2)}`)
+      .map((cat) => `${cat.category}: ৳${cat.amount.toFixed(2)}`)
       .join("\n")}
 
     Please provide:
@@ -113,8 +113,8 @@ export async function generateBudgetRecommendation(
   try {
     const prompt = `
     Based on spending data for ${category}:
-    - Current month spending: $${currentSpending.toFixed(2)}
-    - Historical average: $${historicalAverage.toFixed(2)}
+    - Current month spending: ৳${currentSpending.toFixed(2)}
+    - Historical average: ৳${historicalAverage.toFixed(2)}
     
     Suggest a reasonable monthly budget for this category. Consider:
     1. The spending trend
@@ -143,13 +143,13 @@ export async function generateBudgetRecommendation(
 
     return (
       completion.choices[0]?.message?.content ||
-      `Based on your spending pattern, I'd recommend budgeting $${Math.ceil(
+      `Based on your spending pattern, I'd recommend budgeting ৳${Math.ceil(
         historicalAverage * 1.1
       )} for ${category}.`
     );
   } catch (error) {
     console.error("Error generating budget recommendation:", error);
-    return `Consider setting a budget of $${Math.ceil(
+    return `Consider setting a budget of ৳${Math.ceil(
       historicalAverage * 1.1
     )} for ${category} based on your historical spending.`;
   }
@@ -164,6 +164,7 @@ interface ChatContextData {
 interface ConversationMessage {
   role: "user" | "assistant";
   content: string;
+  isUser?: boolean;
 }
 
 export async function generateChatResponse(
@@ -186,18 +187,21 @@ export async function generateChatResponse(
     const topCategoriesText = Object.entries(categoryTotals)
       .sort(([, a], [, b]) => (b as number) - (a as number))
       .slice(0, 3)
-      .map(([cat, amt]) => `${cat}: $${(amt as number).toFixed(2)}`)
+      .map(([cat, amt]) => `${cat}: ৳${(amt as number).toFixed(2)}`)
       .join(", ");
 
     const avgDaily = (totalSpent / 30).toFixed(2);
 
-    const messages = [
+    const messages: {
+      role: "system" | "user" | "assistant";
+      content: string;
+    }[] = [
       {
         role: "system" as const,
         content: `You are an expert personal finance advisor AI. Be helpful, encouraging, and practical. Keep responses under 80 words and actionable.
 
 User's financial snapshot:
-- 30-day total: $${totalSpent.toFixed(2)} (avg $${avgDaily}/day)
+- 30-day total: ৳${totalSpent.toFixed(2)} (avg ৳${avgDaily}/day)
 - Top categories: ${topCategoriesText}
 
 Provide personalized advice based on their question and spending data.`,
@@ -205,9 +209,10 @@ Provide personalized advice based on their question and spending data.`,
     ];
 
     // Add recent conversation history (last 2 exchanges only for speed)
-    conversationHistory.slice(-2).forEach((msg) => {
+    conversationHistory.slice(-2).forEach((msg: ConversationMessage) => {
+      const role = msg.isUser ? "user" : "assistant";
       messages.push({
-        role: msg.role as "user" | "assistant",
+        role: role as "user" | "assistant",
         content: msg.content,
       });
     });
@@ -233,30 +238,35 @@ Provide personalized advice based on their question and spending data.`,
     }
 
     return response;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error generating chat response:", error);
 
     // Add more specific error information for better debugging
-    if (error.status === 401) {
+    const errorObj = error as {
+      status?: number;
+      code?: string;
+      message?: string;
+    };
+    if (errorObj.status === 401) {
       console.error("OpenAI API: Invalid API key");
       throw new Error(
-        `OpenAI API Error: Invalid API key (Status: ${error.status})`
+        `OpenAI API Error: Invalid API key (Status: ${errorObj.status})`
       );
-    } else if (error.status === 429) {
+    } else if (errorObj.status === 429) {
       console.error("OpenAI API: Rate limit or quota exceeded");
       throw new Error(
-        `OpenAI API Error: Rate limit exceeded (Status: ${error.status}, Code: ${error.code})`
+        `OpenAI API Error: Rate limit exceeded (Status: ${errorObj.status}, Code: ${errorObj.code})`
       );
-    } else if (error.code === "insufficient_quota") {
+    } else if (errorObj.code === "insufficient_quota") {
       console.error("OpenAI API: Insufficient quota");
       throw new Error(
-        `OpenAI API Error: Insufficient quota (Code: ${error.code})`
+        `OpenAI API Error: Insufficient quota (Code: ${errorObj.code})`
       );
     } else {
       console.error("OpenAI API: Unknown error", error);
       throw new Error(
-        `OpenAI API Error: ${error.message || "Unknown error"} (Status: ${
-          error.status
+        `OpenAI API Error: ${errorObj.message || "Unknown error"} (Status: ${
+          errorObj.status
         })`
       );
     }

@@ -114,14 +114,14 @@ export async function POST(request: NextRequest) {
 
       // Provide fallback insight based on data analysis
       const fallbackInsight = {
-        summary: `You spent $${totalSpent.toFixed(
+        summary: `You spent ৳${totalSpent.toFixed(
           2
-        )} this ${period}, averaging $${averageDaily.toFixed(2)} per day.`,
+        )} this ${period}, averaging ৳${averageDaily.toFixed(2)} per day.`,
         advice:
           topCategories.length > 0
             ? `Your top spending category is ${
                 topCategories[0].category
-              } ($${topCategories[0].amount.toFixed(
+              } (৳${topCategories[0].amount.toFixed(
                 2
               )}). Consider reviewing these expenses for potential savings.`
             : "Great job tracking your expenses! Keep monitoring your spending to identify patterns.",

@@ -223,7 +223,7 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${stats?.totalSpent?.toFixed(2) || "0.00"}
+                ৳{stats?.totalSpent?.toFixed(2) || "0.00"}
               </div>
               <p className="text-xs text-muted-foreground">This month</p>
             </CardContent>
@@ -256,7 +256,7 @@ function DashboardContent() {
                 {stats?.topCategories?.[0]?.category || "None"}
               </div>
               <p className="text-xs text-muted-foreground">
-                ${stats?.topCategories?.[0]?.amount?.toFixed(2) || "0.00"} spent
+                ৳{stats?.topCategories?.[0]?.amount?.toFixed(2) || "0.00"} spent
               </p>
             </CardContent>
           </Card>
@@ -270,7 +270,7 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${stats?.dailyAverage?.toFixed(2) || "0.00"}
+                ৳{stats?.dailyAverage?.toFixed(2) || "0.00"}
               </div>
               <p className="text-xs text-muted-foreground">
                 Per day this month
@@ -368,7 +368,7 @@ function DashboardContent() {
                                     </span>
                                   </div>
                                   <span className="text-sm font-medium">
-                                    ${category.amount.toFixed(2)}
+                                    ৳{category.amount.toFixed(2)}
                                   </span>
                                 </div>
                               ))}

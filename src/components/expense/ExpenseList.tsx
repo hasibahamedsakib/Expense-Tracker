@@ -154,7 +154,6 @@ export default function ExpenseList({
 
       {editingExpense && (
         <ExpenseForm
-          userId={editingExpense.userId}
           expense={editingExpense}
           onExpenseAdded={() => {}} // Not used for editing
           onExpenseUpdated={onExpenseUpdated}
