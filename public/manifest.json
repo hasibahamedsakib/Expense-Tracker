@@ -1,0 +1,36 @@
+{
+  "name": "AI Expense Tracker Bangladesh",
+  "short_name": "Expense Tracker BD",
+  "description": "Bangladesh's smartest AI-powered expense tracker in Taka (৳). Track spending, get AI insights, manage budget, and make smarter financial decisions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-BD",
+  "categories": ["finance", "productivity", "business"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/next.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "features": [
+    "ai-powered-insights",
+    "real-time-tracking",
+    "budget-management",
+    "spending-analytics",
+    "bangladeshi-taka-support"
+  ],
+  "prefer_related_applications": false
+}
