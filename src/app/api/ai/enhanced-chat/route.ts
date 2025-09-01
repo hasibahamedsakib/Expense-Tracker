@@ -126,7 +126,8 @@ function getValueInsight(category: string) {
 }
 
 function getSpendingPersonality(contextData: ContextData) {
-  const ratio = (contextData?.topCategoryAmount || 0) / (contextData?.totalSpent || 1);
+  const ratio =
+    (contextData?.topCategoryAmount || 0) / (contextData?.totalSpent || 1);
   if (ratio > 0.4) return "focused spender";
   if (ratio > 0.25) return "balanced allocator";
   return "diversified spender";

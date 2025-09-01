@@ -50,7 +50,12 @@ export async function GET() {
     let errorMessage = "Unknown error";
     let errorCode = "unknown";
 
-    const errorObj = error as { status?: number; code?: string; message?: string; type?: string };
+    const errorObj = error as {
+      status?: number;
+      code?: string;
+      message?: string;
+      type?: string;
+    };
 
     if (errorObj.status === 401) {
       errorMessage = "Invalid API key - please check your OpenAI API key";
