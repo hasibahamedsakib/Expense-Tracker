@@ -171,17 +171,15 @@ export class LocalFinancialAI {
   private generateGreeting(context: FinancialContext): AIResponse {
     const topCat = context.topCategories[0];
     const greetings = [
-      `👋 Hello! I'm your personal financial AI. You've spent  <span className="font-bold text-2xl mr-0.5">৳</span>  ${context.totalSpent.toFixed(
+      `👋 Hello! I'm your personal financial AI. You've spent ৳${context.totalSpent.toFixed(
         2
-      )} recently, averaging  <span className="font-bold text-2xl mr-0.5">৳</span>  ${context.dailyAverage.toFixed(
+      )} recently, averaging ৳${context.dailyAverage.toFixed(
         2
       )}/day. Ready to optimize your finances?`,
       `Hi there! 🌟 I see your biggest expense category is ${
         topCat?.category
-      } at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCat?.amount.toFixed(
-        2
-      )}. Let's make your money work smarter!`,
-      `Hey! 💰 Your financial snapshot shows  <span className="font-bold text-2xl mr-0.5">৳</span>  ${context.totalSpent.toFixed(
+      } at ৳${topCat?.amount.toFixed(2)}. Let's make your money work smarter!`,
+      `Hey! 💰 Your financial snapshot shows ৳${context.totalSpent.toFixed(
         2
       )} in recent spending. I'm here to help you make every taka count!`,
     ];
@@ -199,25 +197,22 @@ export class LocalFinancialAI {
     const trend = this.analyzeTrend(context);
 
     const analyses = [
-      `📊 Your spending breakdown:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
+      `📊 Your spending breakdown: ৳${totalSpent.toFixed(
         2
-      )} total,  <span className="font-bold text-2xl mr-0.5">৳</span>  ${dailyAverage.toFixed(
-        2
-      )}/day average. ${
+      )} total, ৳${dailyAverage.toFixed(2)}/day average. ${
         topCat?.category
-      } leads at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCat?.amount.toFixed(
-        2
-      )} (${((topCat?.amount / totalSpent) * 100).toFixed(
-        1
-      )}% of total). ${trend}`,
-      `💸 Financial analysis: You're spending  <span className="font-bold text-2xl mr-0.5">৳</span>  ${dailyAverage.toFixed(
+      } leads at ৳${topCat?.amount.toFixed(2)} (${(
+        (topCat?.amount / totalSpent) *
+        100
+      ).toFixed(1)}% of total). ${trend}`,
+      `💸 Financial analysis: You're spending ৳${dailyAverage.toFixed(
         2
       )} daily on average. ${
         topCat?.category
-      } dominates your budget at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCat?.amount.toFixed(
+      } dominates your budget at ৳${topCat?.amount.toFixed(
         2
       )}. ${this.getBenchmarkComparison(topCat?.category, topCat?.amount)}`,
-      `📈 Money flow report:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
+      `📈 Money flow report: ৳${totalSpent.toFixed(
         2
       )} outflow, distributed across ${topCategories.length} categories. ${
         topCat?.category
@@ -244,25 +239,19 @@ export class LocalFinancialAI {
       ];
 
     const advice = [
-      `💡 Budget strategy: ${strategy}. With your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
+      `💡 Budget strategy: ${strategy}. With your ৳${totalSpent.toFixed(
         2
-      )} monthly spending, aim for:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
-        totalSpent * 0.5
-      ).toFixed(
+      )} monthly spending, aim for: ৳${(totalSpent * 0.5).toFixed(
         2
-      )} needs,  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
-        totalSpent * 0.3
-      ).toFixed(
-        2
-      )} wants,  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
+      )} needs, ৳${(totalSpent * 0.3).toFixed(2)} wants, ৳${(
         totalSpent * 0.2
       ).toFixed(2)} savings.`,
-      `🎯 Smart budgeting: ${strategy}. Your current  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
+      `🎯 Smart budgeting: ${strategy}. Your current ৳${totalSpent.toFixed(
         2
-      )} spending suggests a weekly budget of  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
-        totalSpent / 4.3
-      ).toFixed(2)} works well.`,
-      `📋 Budget recommendation: ${strategy}. Consider tracking weekly: you're at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
+      )} spending suggests a weekly budget of ৳${(totalSpent / 4.3).toFixed(
+        2
+      )} works well.`,
+      `📋 Budget recommendation: ${strategy}. Consider tracking weekly: you're at ৳${(
         totalSpent / 4.3
       ).toFixed(2)}/week currently.`,
     ];
@@ -293,9 +282,9 @@ export class LocalFinancialAI {
       : (totalSpent * 0.1).toFixed(2);
 
     const advice = [
-      `💰 Saving opportunity: ${savingTip}. Focus on ${topCat?.category} - a 15% reduction saves  <span className="font-bold text-2xl mr-0.5">৳</span>  ${potentialSavings}/month!`,
+      `💰 Saving opportunity: ${savingTip}. Focus on ${topCat?.category} - a 15% reduction saves ৳${potentialSavings}/month!`,
       `🌟 Smart saving: ${savingTip}. Your ${topCat?.category} spending has the most potential - try cutting 10-20% there.`,
-      `⚡ Quick win: ${savingTip}. Target your biggest category (${topCat?.category}) for maximum impact - even  <span className="font-bold text-2xl mr-0.5">৳</span>  ${potentialSavings}/month adds up!`,
+      `⚡ Quick win: ${savingTip}. Target your biggest category (${topCat?.category}) for maximum impact - even ৳${potentialSavings}/month adds up!`,
     ];
 
     return {
@@ -312,11 +301,10 @@ export class LocalFinancialAI {
       .slice(0, 3)
       .map(
         (cat) =>
-          `${
-            cat.category
-          }:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${cat.amount.toFixed(
-            2
-          )} (${((cat.amount / totalSpent) * 100).toFixed(1)}%)`
+          `${cat.category}: ৳${cat.amount.toFixed(2)} (${(
+            (cat.amount / totalSpent) *
+            100
+          ).toFixed(1)}%)`
       )
       .join(", ");
 
@@ -341,7 +329,7 @@ export class LocalFinancialAI {
     const predicted = (totalSpent * trendMultiplier).toFixed(2);
 
     return {
-      message: `🔮 Prediction: Based on your ${monthlyTrend} spending trend, next month you'll likely spend around  <span className="font-bold text-2xl mr-0.5">৳</span>  ${predicted}. Your current pattern suggests ${this.getTrendAdvice(
+      message: `🔮 Prediction: Based on your ${monthlyTrend} spending trend, next month you'll likely spend around ৳${predicted}. Your current pattern suggests ${this.getTrendAdvice(
         monthlyTrend
       )}.`,
       confidence: 0.75,
@@ -360,13 +348,11 @@ export class LocalFinancialAI {
     const benchmark = this.getBenchmark(topCat?.category, topCat?.amount);
 
     return {
-      message: `📊 Comparison: Your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${dailyAverage.toFixed(
+      message: `📊 Comparison: Your ৳${dailyAverage.toFixed(
         2
       )}/day spending is ${benchmark}. ${
         topCat?.category
-      } at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCat?.amount.toFixed(
-        2
-      )} is ${this.getBenchmarkStatus(
+      } at ৳${topCat?.amount.toFixed(2)} is ${this.getBenchmarkStatus(
         topCat?.category,
         topCat?.amount
       )} compared to typical ranges.`,
@@ -380,15 +366,15 @@ export class LocalFinancialAI {
     context: FinancialContext
   ): AIResponse {
     const insights = [
-      `🤔 I understand you're asking about finances. With your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${context.totalSpent.toFixed(
+      `🤔 I understand you're asking about finances. With your ৳${context.totalSpent.toFixed(
         2
       )} spending pattern, I can help with budgeting, saving strategies, or category optimization.`,
       `💭 Interesting question! Your ${
         context.topCategories[0]?.category
-      } spending ( <span className="font-bold text-2xl mr-0.5">৳</span>  ${context.topCategories[0]?.amount.toFixed(
+      } spending (৳${context.topCategories[0]?.amount.toFixed(
         2
       )}) stands out. Want to explore that or ask about something else?`,
-      `✨ Good point! Your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${context.dailyAverage.toFixed(
+      `✨ Good point! Your ৳${context.dailyAverage.toFixed(
         2
       )}/day average suggests room for optimization. What aspect interests you most?`,
     ];
