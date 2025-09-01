@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "৳ Expense Tracker - AI-Powered Financial Insights",
+  title: "Expense Tracker - AI-Powered Financial Insights",
   description:
     "Track your expenses in Bangladeshi Taka with AI-powered insights and recommendations for smarter spending",
 };

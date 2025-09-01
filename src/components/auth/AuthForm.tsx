@@ -160,7 +160,7 @@ export default function AuthForm({ onLogin }: AuthFormProps) {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">
-            ৳ Expense Tracker
+            <span className="font-bold text-2xl mr-0.5">৳</span> Expense Tracker
           </CardTitle>
           <CardDescription>
             AI-powered financial insights for smarter spending in Bangladesh

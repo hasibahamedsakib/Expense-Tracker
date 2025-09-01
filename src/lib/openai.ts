@@ -24,19 +24,33 @@ export async function generateInsight(
     const prompt = `
     Analyze the following expense data and provide a helpful financial insight:
 
-    Total Spent: ৳${totalSpent.toFixed(2)}
-    Average Daily Spending: ৳${averageDaily.toFixed(2)}
+    Total Spent:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
+      2
+    )}
+    Average Daily Spending:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${averageDaily.toFixed(
+      2
+    )}
     
     Category Breakdown:
     ${Object.entries(categoryTotals)
       .map(
-        ([category, amount]) => `${category}: ৳${amount?.toFixed(2) || "0.00"}`
+        ([category, amount]) =>
+          `${category}:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${
+            amount?.toFixed(2) || "0.00"
+          }`
       )
       .join("\n")}
     
     Top Spending Categories:
     ${topCategories
-      .map((cat) => `${cat.category}: ৳${cat.amount.toFixed(2)}`)
+      .map(
+        (cat) =>
+          `${
+            cat.category
+          }:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${cat.amount.toFixed(
+            2
+          )}`
+      )
       .join("\n")}
 
     Please provide:
@@ -113,8 +127,12 @@ export async function generateBudgetRecommendation(
   try {
     const prompt = `
     Based on spending data for ${category}:
-    - Current month spending: ৳${currentSpending.toFixed(2)}
-    - Historical average: ৳${historicalAverage.toFixed(2)}
+    - Current month spending:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${currentSpending.toFixed(
+      2
+    )}
+    - Historical average:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${historicalAverage.toFixed(
+      2
+    )}
     
     Suggest a reasonable monthly budget for this category. Consider:
     1. The spending trend
@@ -143,13 +161,13 @@ export async function generateBudgetRecommendation(
 
     return (
       completion.choices[0]?.message?.content ||
-      `Based on your spending pattern, I'd recommend budgeting ৳${Math.ceil(
+      `Based on your spending pattern, I'd recommend budgeting  <span className="font-bold text-2xl mr-0.5">৳</span>  ${Math.ceil(
         historicalAverage * 1.1
       )} for ${category}.`
     );
   } catch (error) {
     console.error("Error generating budget recommendation:", error);
-    return `Consider setting a budget of ৳${Math.ceil(
+    return `Consider setting a budget of  <span className="font-bold text-2xl mr-0.5">৳</span>  ${Math.ceil(
       historicalAverage * 1.1
     )} for ${category} based on your historical spending.`;
   }
@@ -187,7 +205,12 @@ export async function generateChatResponse(
     const topCategoriesText = Object.entries(categoryTotals)
       .sort(([, a], [, b]) => (b as number) - (a as number))
       .slice(0, 3)
-      .map(([cat, amt]) => `${cat}: ৳${(amt as number).toFixed(2)}`)
+      .map(
+        ([cat, amt]) =>
+          `${cat}:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
+            amt as number
+          ).toFixed(2)}`
+      )
       .join(", ");
 
     const avgDaily = (totalSpent / 30).toFixed(2);
@@ -201,7 +224,9 @@ export async function generateChatResponse(
         content: `You are an expert personal finance advisor AI. Be helpful, encouraging, and practical. Keep responses under 80 words and actionable.
 
 User's financial snapshot:
-- 30-day total: ৳${totalSpent.toFixed(2)} (avg ৳${avgDaily}/day)
+- 30-day total:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
+          2
+        )} (avg  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily}/day)
 - Top categories: ${topCategoriesText}
 
 Provide personalized advice based on their question and spending data.`,

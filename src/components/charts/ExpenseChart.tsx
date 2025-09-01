@@ -98,7 +98,9 @@ export default function ExpenseChart({
                 </Pie>
                 <Tooltip
                   formatter={(value: number) => [
-                    `৳${value.toFixed(2)}`,
+                    ` <span className="font-bold text-2xl mr-0.5">৳</span>  ${value.toFixed(
+                      2
+                    )}`,
                     "Amount",
                   ]}
                 />
@@ -129,7 +131,9 @@ export default function ExpenseChart({
                 <YAxis />
                 <Tooltip
                   formatter={(value: number) => [
-                    `৳${value.toFixed(2)}`,
+                    ` <span className="font-bold text-2xl mr-0.5">৳</span>  ${value.toFixed(
+                      2
+                    )}`,
                     "Amount",
                   ]}
                 />

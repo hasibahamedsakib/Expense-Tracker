@@ -38,12 +38,12 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
     {
       keywords: ["predict", "future", "next month", "forecast"],
       responses: [
-        `Based on your spending patterns, I predict you'll likely spend around ৳${(
+        `Based on your spending patterns, I predict you'll likely spend around  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
           contextData?.totalSpent * 1.05
         ).toFixed(2)} next month if trends continue. Your ${
           contextData?.topCategory
         } spending might increase by 5-10%.`,
-        `Looking at your data trends, next month you might see spending around ৳${(
+        `Looking at your data trends, next month you might see spending around  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
           contextData?.totalSpent * 0.95
         ).toFixed(
           2
@@ -54,8 +54,8 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
     {
       keywords: ["comparison", "compare", "vs", "versus", "against"],
       responses: [
-        `Compared to typical spending patterns, your ৳${contextData?.dailyAverage}/day is quite reasonable. Most people in similar situations spend 10-20% more in ${contextData?.topCategory}.`,
-        `Your spending profile shows you're more conscious than average. The typical person spends ৳${(
+        `Compared to typical spending patterns, your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${contextData?.dailyAverage}/day is quite reasonable. Most people in similar situations spend 10-20% more in ${contextData?.topCategory}.`,
+        `Your spending profile shows you're more conscious than average. The typical person spends  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
           (contextData?.dailyAverage || 0) * 1.3
         ).toFixed(2)}/day in your category mix.`,
       ],
@@ -66,12 +66,12 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
       responses: [
         `To optimize your finances, I'd focus on your ${
           contextData?.topCategory
-        } spending first. A 15% reduction there could save you ৳${(
+        } spending first. A 15% reduction there could save you  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
           contextData?.topCategoryAmount * 0.15
         ).toFixed(2)}/month without major lifestyle changes.`,
         `Smart optimization strategy: Your ${
           contextData?.topCategory
-        } has the most potential. Try the 'conscious spending' approach - question each purchase over ৳${(
+        } has the most potential. Try the 'conscious spending' approach - question each purchase over  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
           (contextData?.dailyAverage || 0) * 2
         ).toFixed(0)} in this category.`,
       ],
@@ -100,7 +100,7 @@ function generateAdvancedResponse(message: string, contextData: ContextData) {
     )} pattern. This typically indicates ${getPersonalityInsight(
       contextData
     )}. Shall we explore optimizations?`,
-    `From a behavioral economics perspective, your ৳${
+    `From a behavioral economics perspective, your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${
       contextData?.dailyAverage
     }/day average suggests ${getBehavioralInsight(
       contextData

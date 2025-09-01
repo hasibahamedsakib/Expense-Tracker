@@ -202,13 +202,13 @@ function DashboardContent() {
             >
               Refresh Data
             </Button>
-            <Button
+            {/* <Button
               onClick={handleSeedData}
               variant="secondary"
               className="flex items-center gap-2"
             >
               Seed Data
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -223,7 +223,8 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ৳{stats?.totalSpent?.toFixed(2) || "0.00"}
+                <span className="font-bold text-2xl mr-0.5">৳</span>{" "}
+                {stats?.totalSpent?.toFixed(2) || "0.00"}
               </div>
               <p className="text-xs text-muted-foreground">This month</p>
             </CardContent>
@@ -256,7 +257,8 @@ function DashboardContent() {
                 {stats?.topCategories?.[0]?.category || "None"}
               </div>
               <p className="text-xs text-muted-foreground">
-                ৳{stats?.topCategories?.[0]?.amount?.toFixed(2) || "0.00"} spent
+                <span className="font-bold text-2xl mr-0.5">৳</span>{" "}
+                {stats?.topCategories?.[0]?.amount?.toFixed(2) || "0.00"} spent
               </p>
             </CardContent>
           </Card>
@@ -270,7 +272,8 @@ function DashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ৳{stats?.dailyAverage?.toFixed(2) || "0.00"}
+                <span className="font-bold text-2xl mr-0.5">৳</span>{" "}
+                {stats?.dailyAverage?.toFixed(2) || "0.00"}
               </div>
               <p className="text-xs text-muted-foreground">
                 Per day this month
@@ -368,7 +371,10 @@ function DashboardContent() {
                                     </span>
                                   </div>
                                   <span className="text-sm font-medium">
-                                    ৳{category.amount.toFixed(2)}
+                                    <span className="font-bold text-2xl mr-0.5">
+                                      ৳
+                                    </span>{" "}
+                                    {category.amount.toFixed(2)}
                                   </span>
                                 </div>
                               ))}

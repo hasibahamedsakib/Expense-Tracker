@@ -87,7 +87,11 @@ export default function ExpenseList({
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <span className="font-semibold text-gray-900 flex items-center">
-                <DollarSign className="h-4 w-4 mr-1" />$
+                {/* <DollarSign className="h-4 w-4 mr-1" />$ */}
+                <span className="font-bold text-2xl mr-0.5">
+                  {" "}
+                  <span className="font-bold text-2xl mr-0.5">৳</span>{" "}
+                </span>
                 {expense.amount.toFixed(2)}
               </span>
               <Badge className={getCategoryColor(expense.category)}>

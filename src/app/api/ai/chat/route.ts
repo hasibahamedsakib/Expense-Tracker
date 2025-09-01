@@ -108,13 +108,13 @@ export async function POST(request: NextRequest) {
         lowerMessage.match(/^(hi|hello|hey|sup|good|morning|afternoon|evening)/)
       ) {
         const greetings = [
-          `👋 Hi there! I'm your AI financial advisor. You've spent ৳${totalSpent.toFixed(
+          `👋 Hi there! I'm your AI financial advisor. You've spent  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
           )} in the last 30 days. What would you like to know?`,
           `Hello! 🌟 I'm here to help with your finances. Your top spending category is ${
             topCat || "unknown"
-          } (৳${topCatAmount}). What's on your mind?`,
-          `Hey! 💫 Ready to dive into your finances? You're averaging ৳${avgDaily}/day in spending. How can I help?`,
+          } ( <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCatAmount}). What's on your mind?`,
+          `Hey! 💫 Ready to dive into your finances? You're averaging  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily}/day in spending. How can I help?`,
         ];
         smartResponse = greetings[Math.floor(Math.random() * greetings.length)];
       }
@@ -126,15 +126,15 @@ export async function POST(request: NextRequest) {
         lowerMessage.includes("money")
       ) {
         const spendingInsights = [
-          `📊 Your spending snapshot: ৳${totalSpent.toFixed(
+          `📊 Your spending snapshot:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
-          )} total (last 30 days), averaging ৳${avgDaily}/day. ${topCat} is your biggest category at ৳${topCatAmount}.`,
-          `💸 You've spent ৳${totalSpent.toFixed(
+          )} total (last 30 days), averaging  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily}/day. ${topCat} is your biggest category at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCatAmount}.`,
+          `💸 You've spent  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
-          )} recently. That's about ৳${avgDaily} per day. Your main expense? ${topCat} at ৳${topCatAmount}. Not bad!`,
-          `📈 Here's the breakdown: ৳${totalSpent.toFixed(
+          )} recently. That's about  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily} per day. Your main expense? ${topCat} at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCatAmount}. Not bad!`,
+          `📈 Here's the breakdown:  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
-          )} total spending, ৳${avgDaily}/day average. ${topCat} leads at ৳${topCatAmount}. Want to optimize any category?`,
+          )} total spending,  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily}/day average. ${topCat} leads at  <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCatAmount}. Want to optimize any category?`,
         ];
         smartResponse =
           spendingInsights[Math.floor(Math.random() * spendingInsights.length)];
@@ -146,19 +146,19 @@ export async function POST(request: NextRequest) {
         lowerMessage.includes("saving")
       ) {
         const budgetTips = [
-          `💡 Budget tip: Try the 50/30/20 rule with your ৳${totalSpent.toFixed(
+          `💡 Budget tip: Try the 50/30/20 rule with your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
-          )} monthly spending. Aim to save ৳${(totalSpent * 0.2).toFixed(
-            2
-          )} per month!`,
-          `🎯 Smart saving: With ৳${avgDaily}/day spending, try setting a daily limit of ৳${(
+          )} monthly spending. Aim to save  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
+            totalSpent * 0.2
+          ).toFixed(2)} per month!`,
+          `🎯 Smart saving: With  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily}/day spending, try setting a daily limit of  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
             parseFloat(avgDaily) * 0.9
           ).toFixed(2)} to save 10% automatically!`,
-          `💰 Budget strategy: Your current ৳${totalSpent.toFixed(
+          `💰 Budget strategy: Your current  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
-          )}/month could include ৳${(totalSpent * 0.2).toFixed(
-            2
-          )} for savings. Start small, think big!`,
+          )}/month could include  <span className="font-bold text-2xl mr-0.5">৳</span>  ${(
+            totalSpent * 0.2
+          ).toFixed(2)} for savings. Start small, think big!`,
         ];
         smartResponse =
           budgetTips[Math.floor(Math.random() * budgetTips.length)];
@@ -166,11 +166,11 @@ export async function POST(request: NextRequest) {
       // Fallback with personality
       else {
         const fallbacks = [
-          `🤔 Interesting! Based on your ৳${totalSpent.toFixed(
+          `🤔 Interesting! Based on your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${totalSpent.toFixed(
             2
           )} spending pattern, I can help with budgets, category analysis, or saving tips. What's your main concern?`,
-          `💭 I see you're thinking about finances! Your ${topCat} spending (৳${topCatAmount}) caught my eye. Want to explore that or something else?`,
-          `✨ Good question! With your ৳${avgDaily}/day spending average, there's always room to optimize. What aspect of your finances interests you most?`,
+          `💭 I see you're thinking about finances! Your ${topCat} spending ( <span className="font-bold text-2xl mr-0.5">৳</span>  ${topCatAmount}) caught my eye. Want to explore that or something else?`,
+          `✨ Good question! With your  <span className="font-bold text-2xl mr-0.5">৳</span>  ${avgDaily}/day spending average, there's always room to optimize. What aspect of your finances interests you most?`,
         ];
         smartResponse = fallbacks[Math.floor(Math.random() * fallbacks.length)];
       }
