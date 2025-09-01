@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://costing-tracker-cxoiu1yv6-sakibs-project.vercel.app";
+const siteUrl = "https://costing-tracker.vercel.app/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -104,7 +104,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <head>
-        <link rel="canonical" href="https://costing-tracker-cxoiu1yv6-sakibs-project.vercel.app" />
+        <link
+          rel="canonical"
+          href="https://costing-tracker-cxoiu1yv6-sakibs-project.vercel.app"
+        />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon.svg" />
@@ -149,8 +152,8 @@ export default function RootLayout({
                 priceCurrency: "BDT",
               },
               author: {
-                "@type": "Organization",
-                name: "Expense Tracker Bangladesh",
+                "@type": "Person",
+                name: "Hasib Ahamed Sakib",
               },
               aggregateRating: {
                 "@type": "AggregateRating",
